@@ -28,7 +28,14 @@ module.exports = function(html, base) {
       if (src && isLocal(src)) {
         var dir = path.dirname(src)
         var file = path.join(base, src)
-        var img = fs.readFileSync(file)
+        var img;
+        
+        try {
+          img = fs.readFileSync(file);
+        } catch(e) {
+          return true;
+        }
+        
         var contentType = contentTypes[path.extname(file)] || 'image/png'
         var dataUri = "data:" + contentType + ";base64," + img.toString("base64")
         el.attr('src', dataUri)
